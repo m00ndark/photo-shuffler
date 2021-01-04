@@ -23,9 +23,11 @@ namespace PhotoShuffler.Model
 
 		private FileData(string filePath)
 		{
+			SourceFilePath = filePath;
 			FileName = Path.GetFileName(filePath);
 		}
 
+		public string SourceFilePath { get; set; }
 		public string FileName { get; set; }
 		public DateTime FileDate { get; set; }
 		[JsonIgnore] public string DestinationPath { get; set; }
@@ -34,7 +36,7 @@ namespace PhotoShuffler.Model
 		public bool Valid => Error == null;
 
 		public string DestinationFilePath => Valid
-			? Path.Combine(Regex.Replace(DestinationPath, @"%date:([^%]+)%", match => FileDate.ToString(match.Groups[1].Value)), FileName)
+			? Path.Combine(Regex.Replace(DestinationPath, "%date:([^%]+)%", match => FileDate.ToString(match.Groups[1].Value)), FileName)
 			: null;
 	}
 }

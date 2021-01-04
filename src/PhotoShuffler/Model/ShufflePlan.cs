@@ -5,22 +5,22 @@ namespace PhotoShuffler.Model
 {
 	internal class ShufflePlan
 	{
-		public ShufflePlan(Configuration config)
+		public ShufflePlan(Configuration configuration)
 		{
-			Config = config;
+			Configuration = configuration;
 		}
 
-		public Configuration Config { get; }
-		public IDictionary<string, FileData> Files { get; } = new Dictionary<string, FileData>();
+		public Configuration Configuration { get; }
+		public List<FileData> Files { get; } = new List<FileData>();
 
 		public void Add(string filePath, DateTime fileDate)
 		{
-			Files.Add(filePath, new FileData(filePath, fileDate, Config.DestinationPath));
+			Files.Add(new FileData(filePath, fileDate, Configuration.DestinationPath));
 		}
 
 		public void AddInvalid(string filePath, string error)
 		{
-			Files.Add(filePath, new FileData(filePath, error: error));
+			Files.Add(new FileData(filePath, error));
 		}
 	}
 }
