@@ -71,17 +71,13 @@ namespace PhotoShuffler
 			{
 				try
 				{
-					if (!filePath.TryGetFileNameDateTime(out DateTime fileNameDateTime))
+					if (filePath.TryGetFileNameDateTime(out DateTime dateTime) || filePath.TryGetMetadataTagDateTime(out dateTime))
 					{
-						shufflePlan.AddInvalid(filePath, "Bad file name");
-					}
-					else if (filePath.TryGetExifTagDateTime(out DateTime tagDateTime) && fileNameDateTime.Matches(tagDateTime))
-					{
-						shufflePlan.Add(filePath, tagDateTime);
+						shufflePlan.Add(filePath, dateTime);
 					}
 					else
 					{
-						shufflePlan.Add(filePath, fileNameDateTime);
+						shufflePlan.AddInvalid(filePath, "Unable to determine file date");
 					}
 				}
 				catch (Exception ex)
@@ -89,7 +85,7 @@ namespace PhotoShuffler
 					shufflePlan.AddInvalid(filePath, ex.Message);
 				}
 
-				if (shufflePlan.Files.Count % 10 == 0)
+				if (shufflePlan.Files.Count % 10 == 0 || shufflePlan.Files.Count == filePaths.Length)
 				{
 					Console.CursorLeft = 0;
 					Console.Write($"Processed {shufflePlan.Files.Count * 100.0 / filePaths.Length:0.00}% ({shufflePlan.Files.Count} / {filePaths.Length})");

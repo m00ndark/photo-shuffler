@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
+using MetadataExtractor.Formats.FileType;
+using MetadataExtractor.Formats.QuickTime;
+using MetadataDirectory = MetadataExtractor.Directory;
 
 namespace PhotoShuffler
 {
@@ -25,21 +29,40 @@ namespace PhotoShuffler
 			return DateTime.TryParseExact(washedImageFileName, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime);
 		}
 
-		public static bool TryGetExifTagDateTime(this string imageFilePath, out DateTime dateTime)
+		public static bool TryGetMetadataTagDateTime(this string imageFilePath, out DateTime dateTime)
 		{
 			dateTime = DateTime.MinValue;
 
-			ExifSubIfdDirectory subIfdDirectory = ImageMetadataReader.ReadMetadata(imageFilePath)
-				.OfType<ExifSubIfdDirectory>()
+			IReadOnlyList<MetadataDirectory> directories = ImageMetadataReader.ReadMetadata(imageFilePath);
+
+			FileTypeDirectory fileTypeDirectory = directories?
+				.OfType<FileTypeDirectory>()
 				.FirstOrDefault();
 
-			return subIfdDirectory != null
-				&& subIfdDirectory.TryGetDateTime(ExifDirectoryBase.TagDateTimeOriginal, out dateTime);
-		}
+			if (fileTypeDirectory == null)
+				return false;
 
-		public static bool Matches(this DateTime fileNameDateTime, DateTime tagDateTime)
-		{
-			return fileNameDateTime >= tagDateTime || fileNameDateTime < tagDateTime.AddSeconds(2);
+			if (fileTypeDirectory.GetDescription(FileTypeDirectory.TagDetectedFileTypeName) == "JPEG")
+			{
+				ExifSubIfdDirectory subIfdDirectory = directories
+					.OfType<ExifSubIfdDirectory>()
+					.FirstOrDefault();
+
+				return subIfdDirectory != null
+					&& subIfdDirectory.TryGetDateTime(ExifDirectoryBase.TagDateTimeOriginal, out dateTime);
+			}
+
+			if (fileTypeDirectory.GetDescription(FileTypeDirectory.TagDetectedFileTypeName) == "QuickTime")
+			{
+				QuickTimeMovieHeaderDirectory quickTimeMovieHeaderDirectory = directories
+					.OfType<QuickTimeMovieHeaderDirectory>()
+					.FirstOrDefault();
+
+				return quickTimeMovieHeaderDirectory != null
+					&& quickTimeMovieHeaderDirectory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out dateTime);
+			}
+
+			return false;
 		}
 
 		public static void PrintAllMetadata(this string imageFilePath)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace PhotoShuffler.Model
@@ -30,10 +31,10 @@ namespace PhotoShuffler.Model
 		[JsonIgnore] public string DestinationPath { get; set; }
 		public string Error { get; set; }
 
-		public bool Valid =>
-			Error == null;
+		public bool Valid => Error == null;
 
-		public string DestinationFilePath =>
-			Valid ? Path.Combine(DestinationPath, FileDate.Year.ToString(), FileDate.ToString("yyyy-MM-dd"), FileName) : null;
+		public string DestinationFilePath => Valid
+			? Path.Combine(Regex.Replace(DestinationPath, @"%date:([^%]+)%", match => FileDate.ToString(match.Groups[1].Value)), FileName)
+			: null;
 	}
 }
