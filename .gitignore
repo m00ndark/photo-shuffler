@@ -1,0 +1,10 @@
+# Build dependencies and output folder
+/build/
+/src/**/obj/
+
+# NuGet dependencies
+/src/packages/
+
+# Visual Studio generated files and folders
+.vs/
+*.user
