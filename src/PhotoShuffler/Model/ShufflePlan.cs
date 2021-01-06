@@ -13,9 +13,9 @@ namespace PhotoShuffler.Model
 		public Configuration Configuration { get; }
 		public List<FileData> Files { get; } = new List<FileData>();
 
-		public void Add(string filePath, DateTime fileDate)
+		public void Add(string filePath, DateTime fileDate, Configuration.Job job)
 		{
-			Files.Add(new FileData(filePath, fileDate, Configuration.DestinationPath));
+			Files.Add(new FileData(filePath, fileDate, job));
 		}
 
 		public void AddInvalid(string filePath, string error)
