@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "PhotoShuffler": {
-      "commandName": "Project",
-      "commandLineArgs": "Z:\\multimedia\\home\\photos\\_mobil\\photo-shuffler.json"
-    }
-  }
-}
