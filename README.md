@@ -1,5 +1,5 @@
 # Photo Shuffler
-Moves media files from a collection of source paths to a dynamically described destination path. Can be used to move photos and videos uploaded from a mobile phone to a folder structure based on the date it was taken/shot.
+Photo Shuffler is an application that moves media files from a set of source paths to a dynamically described destination path. Can be used to move photos and videos uploaded from a mobile phone to a folder structure based on the date it was taken/shot.
 
 ## Configuration
 Create a configuration file with JSON content according to the following example:
