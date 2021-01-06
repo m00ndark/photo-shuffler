@@ -1,5 +1,11 @@
 # Photo Shuffler
-Photo Shuffler is an application that moves media files from a set of source paths to a dynamically described destination path. Can be used to move photos and videos uploaded from a mobile phone to a folder structure based on the date it was taken/shot.
+Photo Shuffler is an application that moves media files from a set of source paths to a dynamically described destination path. It can be used to move photos and videos uploaded from a mobile phone to a folder structure based on the date it was taken/shot.
+
+## Running
+Run the application at command line with the path to a configuration file as argument, like:
+```
+PhotoShuffler.exe photo-shuffler-config.json
+```
 
 ## Configuration
 Create a configuration file with JSON content according to the following example:
