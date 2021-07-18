@@ -114,17 +114,25 @@ namespace PhotoShuffler
 				Console.WriteLine($"Detected {invalidCount} invalid files");
 			}
 
-			string planOutputPath = Path.Combine(Path.GetDirectoryName(config.Path), $"plan-{DateTime.Now:yyyyMMdd-HHmmss}.json");
-
-			Console.WriteLine($"Writing plan to {planOutputPath} ..");
-
-			File.WriteAllText(planOutputPath, shufflePlan.Serialize(), Encoding.UTF8);
+			if (shufflePlan.Files.Any())
+			{
+				string planOutputPath = Path.Combine(Path.GetDirectoryName(config.Path), $"plan-{DateTime.Now:yyyyMMdd-HHmmss}.json");
+				Console.WriteLine($"Writing plan to {planOutputPath} ..");
+				File.WriteAllText(planOutputPath, shufflePlan.Serialize(), Encoding.UTF8);
+			}
 
 			return shufflePlan;
 		}
 
 		private static void Shuffle(ShufflePlan shufflePlan)
 		{
+			if (!shufflePlan.Files.Any())
+			{
+				Console.WriteLine("No matching files found");
+				Console.WriteLine("Done");
+				return;
+			}
+
 			Console.WriteLine("Shuffling files..");
 
 			int movedCount = 0, errorCount = 0;
