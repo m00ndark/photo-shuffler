@@ -45,6 +45,7 @@ Create a configuration file with JSON content according to the following example
 }
 ```
 The appilication will scan all source paths including subfolders for files with the specified file extensions, create and save a plan to move the files to dynamically generated destination paths, then execute the move according to the plan. The scanned folders will not include the specified exclude folders (regex patterns). The date and time of when the image was taken/video was shot is identified either by the format of the file name (starting with `yyyyMMdd_HHmmss`) or by EXIF or QuickTime metadata tags. The destination path can be dynamically described using certain tags as follows:
+
 Tag | Replacement
 --- | -----------
 `%date:<format>%` | A date and time representation of when the image was taken/video was shot according to the specified standard or custom date and time format, see .NET's [Standard Date and Time Format Strings](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings) and [Custom Date and Time Format Strings](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)
